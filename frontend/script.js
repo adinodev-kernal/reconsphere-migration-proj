@@ -16,7 +16,7 @@
 // ═══════════════════════════════════════════════════════
 const API_BASE_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
   ? '' 
-  : 'https://reconsphere-backend.onrender.com'; // TODO: User should update this if different
+  : 'https://reconsphere-migration-proj-4.onrender.com'; // Your Render URL
 
 function showToast(msg, type = 'info') {
   const container = document.getElementById('toast-container');
