@@ -208,9 +208,11 @@
   <div class="screen" id="s-review">
     <div class="review-meta">
       <span class="review-title">—</span>
-      <span class="pill p-red" id="pill-err">— errors</span>
-      <span class="pill p-purple" id="pill-auto">— AI-suggested</span>
-      <span class="pill p-amber" id="pill-total">— total</span>
+      <div class="pill-row">
+        <span class="pill p-red" id="pill-err">— errors</span>
+        <span class="pill p-purple" id="pill-auto">— AI-suggested</span>
+        <span class="pill p-amber" id="pill-total">— total</span>
+      </div>
     </div>
     <div class="filter-row">
       <button class="fbtn on" onclick="setF('all',this)">All</button>

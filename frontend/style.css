@@ -390,6 +390,70 @@ header {
   animation: fadeUp .28s ease both
 }
 
+.module-select.open+.module-select-options {
+  display: block;
+}
+
+/* 📱 MOBILE RESPONSIVE FIXES */
+@media (max-width: 768px) {
+  .top-logo {
+    position: relative;
+    top: 0;
+    left: 0;
+    margin: 40px auto 10px; /* Brought it down and closer to title */
+    display: flex;
+    justify-content: center;
+  }
+  
+  .top-logo-img {
+    width: 60px;
+    height: 60px;
+    border-color: var(--accent); /* Added subtle highlight */
+    box-shadow: 0 0 20px rgba(91, 156, 246, 0.2);
+  }
+
+  .review-meta {
+    flex-direction: column;
+    align-items: center; /* Center everything */
+    text-align: center;
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+
+  .review-title {
+    font-size: 18px;
+    width: 100%;
+    margin-bottom: 4px;
+  }
+
+  .pill-row {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .stats-row {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 10px;
+  }
+  
+  .stat-val {
+    font-size: 22px;
+  }
+
+  .filter-row {
+    justify-content: center; /* Center the scrollable row */
+    padding: 0 10px 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .stats-row {
+    grid-template-columns: 1fr !important;
+  }
+}
+
 .screen.active {
   display: block
 }
@@ -655,6 +719,27 @@ header {
   margin-top: 7px;
   letter-spacing: .04em;
   animation: stepFade .35s ease both
+}
+
+.btn-accept-all {
+  background: linear-gradient(135deg, rgba(139, 111, 245, 0.2), rgba(91, 156, 246, 0.2));
+  border: 1px solid var(--accent2);
+  color: var(--accent2);
+  padding: 5px 14px;
+  border-radius: 20px;
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-left: 10px;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+
+.btn-accept-all:hover {
+  background: var(--accent2);
+  color: #fff;
+  transform: scale(1.02);
 }
 
 @keyframes stepFade {
@@ -2331,4 +2416,77 @@ html.light-mode .skeleton::after {
 
 .module-select.open+.module-select-options {
   display: block;
+}
+
+/* 📱 PREMIUM MOBILE PATCH */
+@media (max-width: 768px) {
+  .top-logo {
+    position: relative;
+    top: 0;
+    left: 0;
+    margin: 40px auto 10px !important;
+    display: flex;
+    justify-content: center;
+  }
+  
+  .top-logo-img {
+    width: 64px !important;
+    height: 64px !important;
+    border-color: var(--accent) !important;
+    box-shadow: 0 0 20px rgba(91, 156, 246, 0.3) !important;
+  }
+
+  .logo {
+    font-size: 32px !important;
+    margin-bottom: 12px !important;
+  }
+
+  .sub-wrap {
+    margin-bottom: 20px !important;
+  }
+
+  .stats-row {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 12px !important;
+    padding: 0 10px;
+  }
+  
+  .stat-card {
+    padding: 12px !important;
+  }
+
+  .stat-val {
+    font-size: 22px !important;
+  }
+
+  .review-meta {
+    flex-direction: column !important;
+    align-items: center !important;
+    text-align: center !important;
+    gap: 16px !important;
+    margin: 20px 0 !important;
+  }
+
+  .pill-row {
+    display: flex !important;
+    gap: 8px !important;
+    justify-content: center !important;
+    flex-wrap: wrap !important;
+  }
+
+  .filter-row {
+    justify-content: center !important;
+    padding: 0 10px 15px !important;
+    gap: 12px !important;
+  }
+  
+  .app {
+    padding: 20px 12px 80px !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .stats-row {
+    grid-template-columns: 1fr !important;
+  }
 }
