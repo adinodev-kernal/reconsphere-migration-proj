@@ -12,8 +12,11 @@
 // 6. Added file input handler for real file upload
 // 7. ROWS is now a variable (let) not const so it can be replaced
 // ═══════════════════════════════════════════════════════
-
-
+// 1. CONFIGURATION
+// ═══════════════════════════════════════════════════════
+const API_BASE_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+  ? '' 
+  : 'https://reconsphere-backend.onrender.com'; // TODO: User should update this if different
 
 function showToast(msg, type = 'info') {
   const container = document.getElementById('toast-container');
@@ -473,7 +476,7 @@ window.sendChatMessage = async function (rowId) {
   };
 
   try {
-    const response = await fetch('/api/chat', {
+    const response = await fetch(`${API_BASE_URL}/api/chat`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ prompt: userText, context })
@@ -564,7 +567,7 @@ function fireConfetti() {
 function triggerDownload(rows, suffix) {
   if (rows.length === 0) return showToast('No rows to export', 'error');
   showToast('Generating file...', 'info');
-  fetch('/api/download', {
+  fetch(`${API_BASE_URL}/api/download`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ rows, fileName: currentFileName + '_' + suffix + '.csv' })
@@ -633,7 +636,7 @@ window.uploadToAzure = async function () {
   formData.append('file', file);
 
   try {
-    const res = await fetch('/api/azure/upload', {
+    const res = await fetch(`${API_BASE_URL}/api/azure/upload`, {
       method: 'POST',
       body: formData
     });
@@ -931,7 +934,7 @@ function beginUpload(file) {
   const moduleSel = document.getElementById('module-select');
   formData.append('module', moduleSel ? moduleSel.value : 'vendor_master');
 
-  fetch('/api/validate', {
+  fetch(`${API_BASE_URL}/api/validate`, {
     method: 'POST',
     body: formData,
     signal: window.uploadAbortController.signal
