@@ -400,21 +400,24 @@ header {
     position: relative;
     top: 0;
     left: 0;
-    margin: 40px auto 10px; /* Brought it down and closer to title */
+    margin: 40px auto 10px;
+    /* Brought it down and closer to title */
     display: flex;
     justify-content: center;
   }
-  
+
   .top-logo-img {
     width: 60px;
     height: 60px;
-    border-color: var(--accent); /* Added subtle highlight */
+    border-color: var(--accent);
+    /* Added subtle highlight */
     box-shadow: 0 0 20px rgba(91, 156, 246, 0.2);
   }
 
   .review-meta {
     flex-direction: column;
-    align-items: center; /* Center everything */
+    align-items: center;
+    /* Center everything */
     text-align: center;
     gap: 12px;
     margin-bottom: 20px;
@@ -437,13 +440,14 @@ header {
     grid-template-columns: repeat(2, 1fr) !important;
     gap: 10px;
   }
-  
+
   .stat-val {
     font-size: 22px;
   }
 
   .filter-row {
-    justify-content: center; /* Center the scrollable row */
+    justify-content: center;
+    /* Center the scrollable row */
     padding: 0 10px 10px;
   }
 }
@@ -647,7 +651,11 @@ header {
   font-family: 'DM Mono', monospace;
   font-size: 11px;
   color: var(--text3);
-  margin-left: auto
+  margin-left: auto;
+  min-width: 120px;
+  /* Stabilizes the Cancel button */
+  text-align: right;
+  white-space: nowrap;
 }
 
 .ptrack {
@@ -2428,7 +2436,7 @@ html.light-mode .skeleton::after {
     display: flex;
     justify-content: center;
   }
-  
+
   .top-logo-img {
     width: 64px !important;
     height: 64px !important;
@@ -2450,7 +2458,7 @@ html.light-mode .skeleton::after {
     gap: 12px !important;
     padding: 0 10px;
   }
-  
+
   .stat-card {
     padding: 12px !important;
   }
@@ -2475,13 +2483,59 @@ html.light-mode .skeleton::after {
   }
 
   .filter-row {
-    justify-content: center !important;
-    padding: 0 10px 15px !important;
+    justify-content: flex-start !important;
+    padding: 0 16px 15px !important;
+    /* Added left/right padding for scroll */
     gap: 12px !important;
+    scroll-padding: 0 16px;
+    /* Ensures buttons don't hit the edge when scrolling */
   }
-  
+
   .app {
     padding: 20px 12px 80px !important;
+  }
+
+  /* Progress Box Ironclad Mobile Fix */
+  .prog-file {
+    display: grid !important;
+    grid-template-columns: 40px 1fr !important;
+    grid-template-areas: 
+      "badge info"
+      "status cancel" !important;
+    gap: 12px !important;
+    align-items: center !important;
+  }
+
+  #prog-badge {
+    grid-area: badge !important;
+  }
+
+  .prog-file > div:nth-child(2) {
+    grid-area: info !important;
+    overflow: hidden;
+  }
+
+  #prog-status {
+    grid-area: status !important;
+    margin: 0 !important;
+    text-align: left !important;
+    white-space: nowrap !important;
+    font-size: 11px !important;
+    color: var(--accent) !important;
+  }
+
+  .btn-cancel {
+    grid-area: cancel !important;
+    justify-self: end !important;
+    margin: 0 !important;
+  }
+
+  .ptrack {
+    margin: 15px 0 10px !important;
+  }
+
+  #pstep {
+    display: none !important;
   }
 }
 
