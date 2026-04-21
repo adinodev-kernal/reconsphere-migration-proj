@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="color-scheme" content="dark">
+  <title>ReconSphere — Where enterprise data meets intelligence</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Mono:ital,wght@0,300;0,400;0,500;1,400&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap"
+    rel="stylesheet" />
+
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <div class="grid-bg"><canvas id="grid-canvas"></canvas></div>
+  <div class="app">
+
+    <header style="position:relative; padding-top: 30px;">
+
+
+      <div class="logo-row">
+        <div class="logo-rule"></div>
+        <h1 class="logo">ReconSphere</h1>
+        <div class="logo-rule r"></div>
+      </div>
+      <div class="sub-wrap">
+        <div class="sub-line la vis" id="sub-a">Where enterprise data meets intelligence</div>
+        <div class="sub-line lb hid" id="sub-b">
+          <span>Powered by</span><span style="color:var(--text3)">—</span>
+          <span>Azure Cloud</span><span style="color:var(--text3)">·</span>
+          <span>Gemini AI</span><span style="color:var(--text3)"></span>
+        </div>
+        <div class="sub-line lb hid" id="sub-c">
+          <span>Built with</span>
+          <span style="color:var(--text3)">—</span>
+          <span>Python</span>
+          <span style="color:var(--text3)">·</span>
+          <span>Node.js</span>
+          <span style="color:var(--text3)">·</span>
+          <span>Express</span>
+        </div>
+      </div>
+  </div>
+  <div class="hdr-rule"></div>
+  </header>
+
+  <div class="stats-row" id="main-stats" style="display: none; grid-template-columns: repeat(5, 1fr);">
+    <div class="stat-card blue">
+      <div class="stat-label">Total rows</div>
+      <div class="stat-val sv-blue" id="st-total">—</div>
+    </div>
+    <div class="stat-card red">
+      <div class="stat-label">Errors found</div>
+      <div class="stat-val sv-red" id="st-err">—</div>
+    </div>
+    <div class="stat-card green">
+      <div class="stat-label">Clean rows</div>
+      <div class="stat-val sv-green" id="st-clean">—</div>
+    </div>
+    <div class="stat-card purple">
+      <div class="stat-label">Fixable rows</div>
+      <div class="stat-val sv-purple" id="st-ai">—</div>
+    </div>
+    <div class="stat-card blue">
+      <div class="stat-label">Data Quality</div>
+      <div class="stat-val" id="st-score" style="color: var(--accent);">—</div>
+    </div>
+  </div>
+
+  <div class="tab-wrap" id="tab-nav-wrap" style="display:none;">
+    <nav class="tab-nav">
+      <button class="tab-btn active" id="tb-upload" onclick="goto('upload')">
+        <svg class="tab-icon" width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor"
+          stroke-width="1.4" stroke-linecap="round">
+          <rect x="1.5" y="3.5" width="11" height="9" rx="1.5" />
+          <path d="M9 3.5v-1a1.5 1.5 0 00-4 0v1" />
+          <path d="M7 6v3.5M5.5 8l1.5-2 1.5 2" />
+        </svg>
+        Upload<span class="tab-badge" id="tn1">01</span>
+      </button>
+      <button class="tab-btn" id="tb-review" onclick="goto('review')" style="pointer-events: none; opacity: 0.5;">
+        <svg class="tab-icon" width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor"
+          stroke-width="1.4" stroke-linecap="round">
+          <circle cx="7" cy="7" r="5.5" />
+          <path d="M7 4.5v2.8l1.8 1.8" />
+        </svg>
+        Review &amp; Fix<span class="tab-badge" id="tn2">02</span>
+      </button>
+      <button class="tab-btn" id="tb-export" onclick="goto('export')" style="pointer-events: none; opacity: 0.5;">
+        <svg class="tab-icon" width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor"
+          stroke-width="1.4" stroke-linecap="round">
+          <path d="M7 2v7.5M4.5 7l2.5 2.5L9.5 7" />
+          <path d="M2 12h10" />
+        </svg>
+        Export<span class="tab-badge" id="tn3">03</span>
+      </button>
+    </nav>
+  </div>
+  <div class="screen active" id="s-landing">
+    <div class="hero-section" style="text-align:center; padding: 40px 20px;">
+      <h2
+        style="font-family:'Syne',sans-serif; font-size:clamp(28px, 6vw, 42px); font-weight:700; background:linear-gradient(130deg, var(--text) 0%, var(--accent) 100%); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; margin-bottom:16px; transform: translateZ(0);">
+        Validate SAP Data with AI</h2>
+      <p
+        style="font-size:clamp(14px, 4vw, 16px); color:var(--text2); max-width:650px; margin:0 auto 40px; line-height:1.6;">
+        Upload your master data to find anomalies and automatically fix formatting, typos, and SAP rule violations
+        before migration.</p>
+
+      <div class="carousel-scene" style="margin-bottom: 60px;">
+        <div class="hc-card">
+          <div style="font-size:clamp(24px, 6vw, 32px); margin-bottom:12px;">🧠</div>
+          <h3
+            style="font-family:'Syne',sans-serif; font-size:clamp(16px, 4vw, 18px); margin-bottom:10px; color:var(--text);">
+            AI-Powered Corrections</h3>
+          <p style="font-size:clamp(12px, 3.5vw, 14px); color:var(--text3); line-height:1.6;">Uses Google Gemini to
+            intelligently suggest highly accurate corrections for unstructured typos and casing issues.</p>
+        </div>
+        <div class="hc-card">
+          <div style="font-size:clamp(24px, 6vw, 32px); margin-bottom:12px;">⚡</div>
+          <h3
+            style="font-family:'Syne',sans-serif; font-size:clamp(16px, 4vw, 18px); margin-bottom:10px; color:var(--text);">
+            Deterministic SAP Rules</h3>
+          <p style="font-size:clamp(12px, 3.5vw, 14px); color:var(--text3); line-height:1.6;">Strict validation against
+            core S/4HANA rules (MARA, LFA1, KNA1) ensuring zero errors upon BDC migration.</p>
+        </div>
+        <div class="hc-card">
+          <div style="font-size:clamp(24px, 6vw, 32px); margin-bottom:12px;">☁️</div>
+          <h3
+            style="font-family:'Syne',sans-serif; font-size:clamp(16px, 4vw, 18px); margin-bottom:10px; color:var(--text);">
+            Cloud-Native Architecture</h3>
+          <p style="font-size:clamp(12px, 3.5vw, 14px); color:var(--text3); line-height:1.6;">Scalable, responsive
+            backend designed to seamlessly connect with Azure Blob Storage for enterprise workloads.</p>
+        </div>
+      </div>
+
+      <button class="btn btn-hero" onclick="goto('upload')">Get Started →</button>
+    </div>
+  </div>
+
+  <div class="screen" id="s-upload">
+
+    <!-- CHANGE: removed onclick="beginUpload()" from this div -->
+    <div class="upload-zone" id="uz">
+      <div class="u-ring">
+        <svg width="28" height="28" viewBox="0 0 28 28" fill="none" stroke="#5b9cf6" stroke-width="1.5"
+          stroke-linecap="round">
+          <path d="M5 18v4a2 2 0 002 2h14a2 2 0 002-2v-4" />
+          <path d="M14 4v14M10 9l4-5 4 5" />
+        </svg>
+      </div>
+      <div class="upload-title">Drop your SAP migration file here</div>
+      <div class="upload-sub">
+        Max 25 MB · CSV, XLSX, XLS · All data stays local
+      </div>
+
+      <div style="margin-bottom: 24px;">
+        <select id="module-select" class="module-select" onclick="event.stopPropagation()">
+          <option value="vendor_master">Vendor Master (LFA1)</option>
+          <option value="material_master">Material Master (MARA)</option>
+          <option value="customer_master">Customer Master (KNA1)</option>
+        </select>
+      </div>
+
+      <!-- CHANGE: file input moved outside button, button only triggers click -->
+      <input type="file" id="file-input" accept=".csv,.xlsx,.xls" style="display:none"
+        onchange="handleFileSelect(this)" />
+      <button class="btn primary upload-btn" onclick="document.getElementById('file-input').click()">
+        Browse files
+      </button>
+    </div>
+
+    <div class="info-row">
+      <svg width="13" height="13" viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="1.3"
+        stroke-linecap="round" style="flex-shrink:0;opacity:.5">
+        <circle cx="6.5" cy="6.5" r="5" />
+        <path d="M6.5 4.5v3M6.5 9v.5" />
+      </svg>
+      Try with <strong>sample data</strong> — vendor master with intentional migration errors pre-loaded
+      <!-- CHANGE: explicitly passes null so demo mode triggers, not real upload -->
+      <button class="btn-sample" onclick="beginUpload(null)">Load sample</button>
+    </div>
+
+    <!-- CHANGE: prog-name and prog-meta are now empty, filled dynamically by JS -->
+    <div class="prog-box" id="prog-box">
+      <div class="prog-file">
+        <div class="prog-badge" id="prog-badge">XLS</div>
+        <div>
+          <div class="prog-name" id="prog-name">—</div>
+          <div class="prog-meta" id="prog-meta">—</div>
+        </div>
+        <span class="prog-status" id="prog-status" style="margin-left:auto;">Uploading…</span>
+        <button class="btn-cancel" onclick="cancelUpload()">Cancel</button>
+      </div>
+      <div class="ptrack">
+        <div class="pbar" id="pbar"></div>
+      </div>
+      <div class="pstep" id="pstep">—</div>
+    </div>
+
+  </div>
+  <div class="screen" id="s-review">
+    <div class="review-meta">
+      <span class="review-title">—</span>
+      <span class="pill p-red" id="pill-err">— errors</span>
+      <span class="pill p-purple" id="pill-auto">— AI-suggested</span>
+      <span class="pill p-amber" id="pill-total">— total</span>
+    </div>
+    <div class="filter-row">
+      <button class="fbtn on" onclick="setF('all',this)">All</button>
+      <button class="fbtn" onclick="setF('err',this)">Errors only</button>
+      <button class="fbtn" onclick="setF('ai',this)">AI-suggestion</button>
+      <button class="fbtn" onclick="setF('pending',this)">Pending review</button>
+      <button class="btn-accept-all" onclick="acceptAllHighConf()">✨ Accept All AI Fixes (>90%)</button>
+      <span class="scroll-hint" style="margin-left: 10px;">← swipe table →</span>
+    </div>
+    <div class="tbl-card">
+      <div class="tbl-scroll">
+        <table>
+          <thead>
+            <tr>
+              <th style="width:38px">#</th>
+              <th style="min-width:155px">Vendor name</th>
+              <th style="min-width:115px">Vendor code</th>
+              <th style="min-width:76px">Country</th>
+              <th style="min-width:108px">Payment terms</th>
+              <th style="min-width:138px">Bank key (IFSC)</th>
+              <th style="min-width:118px">GST / Tax no.</th>
+              <th style="min-width:95px">Postal code</th>
+              <th style="min-width:88px">Currency</th>
+              <th style="min-width:90px">Status</th>
+            </tr>
+          </thead>
+          <tbody id="tbl-body"></tbody>
+        </table>
+      </div>
+    </div>
+    <div class="ai-panel">
+      <div class="aip-head">
+        <div class="ai-dot"></div>
+        <span class="aip-title">AI review assistant</span>
+        <div id="ai-row-tag" style="margin-left:auto"></div>
+      </div>
+      <div class="issue-nav" id="issue-nav" style="display:none">
+        <span class="i-ctr" id="i-ctr">Issue 1 of 13</span>
+        <button class="btn sm" onclick="prevI()">‹ Prev</button>
+        <button class="btn sm" onclick="nextI()">Next ›</button>
+      </div>
+      <div class="issue-body" id="issue-body">
+        <div class="empty-panel">
+          <div class="empty-ring"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="var(--text3)"
+              stroke-width="1.4" stroke-linecap="round">
+              <circle cx="8" cy="8" r="6" />
+              <path d="M8 5.5v3M8 10v.5" />
+            </svg></div>
+          <div class="empty-ttl">No row selected</div>
+          <div class="empty-sub">Click any flagged row in the table above to begin</div>
+        </div>
+      </div>
+      <div class="action-bar" id="action-bar" style="display:none">
+        <button class="btn success" onclick="acceptCur()">
+          <svg width="13" height="13" viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="1.8"
+            stroke-linecap="round">
+            <path d="M2 7l4 4 5-6" />
+          </svg>Accept fix
+        </button>
+        <button class="btn primary" onclick="saveEdit()">
+          <svg width="13" height="13" viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="1.5"
+            stroke-linecap="round">
+            <path d="M1.5 9.5V11.5h2l6-6-2-2-6 6z" />
+          </svg>Save my edit
+        </button>
+        <button class="btn danger" onclick="rejectCur()">Skip</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="screen" id="s-export">
+    <div class="ex-grid">
+      <div class="ex-stat blue">
+        <div class="ex-label">Total rows</div>
+        <div class="ex-val sv-blue" id="ex-total">—</div>
+      </div>
+      <div class="ex-stat green">
+        <div class="ex-label">Clean rows</div>
+        <div class="ex-val sv-green" id="ex-clean">—</div>
+      </div>
+      <div class="ex-stat purple">
+        <div class="ex-label">Fixable rows</div>
+        <div class="ex-val sv-purple" id="ex-ai">—</div>
+      </div>
+      <div class="ex-stat amber">
+        <div class="ex-label">Skipped</div>
+        <div class="ex-val sv-amber" id="ex-skip">—</div>
+      </div>
+    </div>
+    <div class="ex-cards">
+      <div class="ex-card" onclick="downloadCorrected()">
+        <div class="ex-icon" style="background:var(--green-bg);color:var(--green);border:.5px solid var(--green-bd)">XLS
+        </div>
+        <div class="ex-info">
+          <div class="ex-card-ttl">Download corrected Excel</div>
+          <div class="ex-card-sub">All accepted fixes applied — ready for SAP BDC upload</div>
+        </div><span class="ex-arr">›</span>
+      </div>
+      <div class="ex-card" onclick="uploadToAzure()">
+        <div class="ex-icon" style="background:var(--blue-bg);color:var(--accent);border:.5px solid var(--blue-bd)"><svg
+            width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"
+            stroke-linecap="round">
+            <path d="M8 2v9M5 8l3 3 3-3" />
+            <path d="M2 13h12" />
+          </svg></div>
+        <div class="ex-info">
+          <div class="ex-card-ttl">Push to Azure Blob Storage</div>
+          <div class="ex-card-sub">SAS-secured — direct to your migration container</div>
+        </div><span class="ex-arr">›</span>
+      </div>
+      <div class="ex-card" onclick="downloadAuditReport()">
+        <div class="ex-icon" style="background:var(--red-bg);color:var(--red);border:.5px solid var(--red-bd)">PDF</div>
+        <div class="ex-info">
+          <div class="ex-card-ttl">Download audit report</div>
+          <div class="ex-card-sub">Full change log with AI rationale — every fix documented</div>
+        </div><span class="ex-arr">›</span>
+      </div>
+      <div class="ex-card" onclick="downloadSkipped()">
+        <div class="ex-icon" style="background:var(--amber-bg);color:var(--amber);border:.5px solid var(--amber-bd)">CSV
+        </div>
+        <div class="ex-info">
+          <div class="ex-card-ttl">Export skipped rows only</div>
+          <div class="ex-card-sub">Rows needing direct correction inside SAP</div>
+        </div><span class="ex-arr">›</span>
+      </div>
+    </div>
+  </div>
+
+  </div>
+
+  <div id="toast-container" class="toast-container"></div>
+  <canvas id="confetti-canvas"
+    style="position:fixed; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:9999; display:none;"></canvas>
+
+  <script src="grid.js"></script>
+  <script src="script.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,35 @@
+{
+  "module": "customer_master",
+  "sap_table": "KNA1",
+  "description": "SAP Customer Master Data Rules",
+  "fields": {
+    "CUSTOMER_CODE": {
+      "required": true,
+      "max_length": 10,
+      "pattern": "^[0-9A-Za-z]+$",
+      "unique": true
+    },
+    "CUSTOMER_NAME": {
+      "required": true,
+      "max_length": 35,
+      "casing": "title"
+    },
+    "COUNTRY": {
+      "required": true,
+      "allowed_values_ref": "iso_countries.json"
+    },
+    "CITY": {
+      "required": true,
+      "max_length": 35,
+      "casing": "title"
+    },
+    "POSTAL_CODE": {
+      "required": true,
+      "max_length": 10
+    },
+    "TAX_NUMBER": {
+      "required_if": {"field": "COUNTRY", "value": "IN"},
+      "pattern": "^[0-9A-Z]{15}$"
+    }
+  }
+}

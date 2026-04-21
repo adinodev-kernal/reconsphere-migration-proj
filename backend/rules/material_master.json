@@ -1,0 +1,35 @@
+{
+  "module": "material_master",
+  "sap_table": "MARA",
+  "description": "SAP Material Master Data Rules",
+  "fields": {
+    "MATERIAL_NUMBER": {
+      "required": true,
+      "max_length": 18,
+      "unique": true
+    },
+    "MATERIAL_DESCRIPTION": {
+      "required": true,
+      "max_length": 40,
+      "casing": "title"
+    },
+    "BASE_UOM": {
+      "required": true,
+      "max_length": 3,
+      "casing": "upper"
+    },
+    "MATERIAL_TYPE": {
+      "required": true,
+      "max_length": 4,
+      "casing": "upper"
+    },
+    "MATERIAL_GROUP": {
+      "required": false,
+      "max_length": 9
+    },
+    "NET_WEIGHT": {
+      "required": false,
+      "pattern": "^[0-9]+(\\.[0-9]{1,3})?$"
+    }
+  }
+}

@@ -1,0 +1,26 @@
+# Environment
+.env
+.env.local
+.env.production
+
+# Node
+node_modules/
+npm-debug.log
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.venv/
+venv/
+env/
+
+# Uploads (temp files)
+uploads/
+*.xlsx
+*.xls
+*.csv
+
+# OS
+.DS_Store
+Thumbs.db
