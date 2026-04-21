@@ -12,22 +12,6 @@ ReconSphere is an AI-powered, cloud-native SAP data migration validation tool. I
 * **Beautiful UI**: An interactive, glassmorphic UI built with pure HTML/CSS/JS, featuring a dynamic interactive grid, dark/light mode, and smooth animations.
 * **Instant Export**: Download corrected data ready for SAP BDC/LSMW upload, or skipped rows for manual review.
 
-## 🏗️ Architecture
-
-```mermaid
-graph LR
-    A[Browser / Frontend] -->|File Upload via multipart/form-data| B(Node.js Express Server)
-    B -->|Calls script via spawn| C{Python Validation Engine}
-    C -->|Deterministic Checks| D[Rule Set (Regex/Logic)]
-    C -->|Fuzzy/Contextual Checks| E[Google Gemini API]
-    E -.->|AI Suggestions| C
-    D -.->|Violations| C
-    C -->|Returns JSON Results| B
-    B -->|Sends JSON Response| A
-    A -->|User Reviews & Accepts Fixes| A
-    A -->|Downloads Corrected CSV| F[SAP S/4HANA Ready File]
-```
-
 ## 🚀 Getting Started
 
 ### Prerequisites
