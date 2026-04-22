@@ -15,14 +15,24 @@ load_dotenv()
 
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY", "")
 
+import concurrent.futures
+
 # ── Lazy import so app still works without Gemini key ──
+_MODEL_CACHE = None
+
 def _get_model():
+    global _MODEL_CACHE
+    if _MODEL_CACHE is not None:
+        return _MODEL_CACHE
+        
     try:
         import google.generativeai as genai
         if not GEMINI_API_KEY or "your_gemini" in GEMINI_API_KEY:
             return None
         genai.configure(api_key=GEMINI_API_KEY)
-        return genai.GenerativeModel("gemini-2.5-flash")
+        # Restoring gemini-2.5-flash as verified available in this env
+        _MODEL_CACHE = genai.GenerativeModel("gemini-2.5-flash")
+        return _MODEL_CACHE
     except ImportError:
         return None
 
@@ -135,33 +145,29 @@ def parse_response(text):
     return {"corrected_value": None, "confidence": 0,
             "reason": "AI could not parse a correction"}
 
-# ─────────────────────────────────────────
-# MAIN FUNCTION — called from validator.py
-# ─────────────────────────────────────────
-def get_ai_corrections_batch(issues, module):
-    model = _get_model()
-    if model is None:
-        return [_mock_correction(i["field"], i["value"], i["reason"]) for i in issues]
 
-    # Build prompt
+def _process_chunk(model, chunk, module):
+    """Internal helper to process a single chunk of issues through Gemini"""
+    if not chunk:
+        return []
+
     issue_list = ""
-    for idx, issue in enumerate(issues):
+    for idx, issue in enumerate(chunk):
         issue_list += f"{idx+1}. field={issue['field']} | bad_value=\"{issue['value']}\" | reason={issue['reason']}\n"
 
     prompt = f"""You are a SAP S/4HANA data migration specialist.
-Below are {len(issues)} field validation errors from a {module.replace('_',' ')} upload.
+Below are {len(chunk)} field validation errors from a {module.replace('_',' ')} upload.
 
 {issue_list}
 
 For each issue, suggest a corrected value.
-Respond ONLY with a JSON array with exactly {len(issues)} objects in the same order.
+Respond ONLY with a JSON array with exactly {len(chunk)} objects in the same order.
 Each object must have exactly these keys: corrected_value, confidence, reason.
 confidence is 0-100. If you cannot correct, set corrected_value to null and confidence to 0.
 reason must be ONE sentence maximum — no more than 15 words.
 No markdown, no explanation, just the raw JSON array starting with [ and ending with ]."""
 
     try:
-        time.sleep(1)
         response = model.generate_content(
             prompt,
             generation_config={
@@ -173,17 +179,81 @@ No markdown, no explanation, just the raw JSON array starting with [ and ending 
         match = re.search(r'\[.*\]', raw, re.DOTALL)
         if match:
             results = json.loads(match.group())
-            if len(results) == len(issues):
+            if len(results) == len(chunk):
                 return results
-            # Wrong count — pad or trim to match
-            while len(results) < len(issues):
-                results.append({"corrected_value": None, "confidence": 0, "reason": "no correction available"})
-            return results[:len(issues)]
+            
+            # Count mismatch fallback
+            if len(results) < len(chunk):
+                results.extend([{"corrected_value": None, "confidence": 0, "reason": "ai mismatch"}] * (len(chunk) - len(results)))
+            return results[:len(chunk)]
     except Exception as e:
-        print(f"[ai_engine] Batch error: {e}", file=sys.stderr, flush=True)
+        print(f"[ai_engine] Chunk error: {e}", file=sys.stderr, flush=True)
+    
+    # Fallback for failed chunk
+    return [_mock_correction(i["field"], i["value"], i["reason"]) for i in chunk]
 
-    # Fallback to mock if anything fails
-    return [_mock_correction(i["field"], i["value"], i["reason"]) for i in issues]
+# ─────────────────────────────────────────
+# MAIN FUNCTION — called from validator.py
+# ─────────────────────────────────────────
+def get_ai_corrections_batch(issues, module):
+    if not issues:
+        return []
+
+    model = _get_model()
+    
+    # 1. Try rule-based fixes FIRST for everything to save API cost/time
+    final_results = [None] * len(issues)
+    ai_queue = [] # list of (original_index, issue)
+
+    for idx, issue in enumerate(issues):
+        rule_fix = rule_based_fix(issue["field"], issue["value"], issue["rule"])
+        if rule_fix:
+            final_results[idx] = rule_fix
+        else:
+            ai_queue.append((idx, issue))
+
+    if not ai_queue:
+        return final_results
+
+    # 2. If no model, use mock for the rest
+    if model is None:
+        for idx, issue in ai_queue:
+            final_results[idx] = _mock_correction(issue["field"], issue["value"], issue["reason"])
+        return final_results
+
+    # 3. Process AI queue in chunks of 15 (sweet spot for Gemini Flash stability)
+    CHUNK_SIZE = 15
+    chunks = [ai_queue[i:i + CHUNK_SIZE] for i in range(0, len(ai_queue), CHUNK_SIZE)]
+    
+    # Use ThreadPoolExecutor for parallel chunk processing
+    # Max workers set to 4 to balance speed and rate limits
+    with concurrent.futures.ThreadPoolExecutor(max_workers=4) as executor:
+        # Map chunks to model calls
+        future_to_chunk_idx = {
+            executor.submit(_process_chunk, model, [item[1] for item in chunk], module): i 
+            for i, chunk in enumerate(chunks)
+        }
+        
+        for future in concurrent.futures.as_completed(future_to_chunk_idx):
+            chunk_idx = future_to_chunk_idx[future]
+            chunk_items = chunks[chunk_idx]
+            try:
+                chunk_results = future.result()
+                for (original_idx, _), result in zip(chunk_items, chunk_results):
+                    final_results[original_idx] = result
+            except Exception as e:
+                print(f"[ai_engine] Future error: {e}", file=sys.stderr, flush=True)
+                # Fallback for this specific chunk
+                for original_idx, issue in chunk_items:
+                    final_results[original_idx] = _mock_correction(issue["field"], issue["value"], issue["reason"])
+
+    # Final pass to ensure no Nones
+    for i in range(len(final_results)):
+        if final_results[i] is None:
+            final_results[i] = {"corrected_value": None, "confidence": 0, "reason": "processing failure"}
+
+    return final_results
+
 # ─────────────────────────────────────────
 # MOCK CORRECTIONS — used when no API key
 # Lets you test the full flow locally

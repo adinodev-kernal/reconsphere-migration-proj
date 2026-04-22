@@ -14,7 +14,7 @@ import sys
 import pandas as pd
 from pathlib import Path
 
-from ai_engine import get_ai_corrections_batch
+from ai_engine import get_ai_corrections_batch, rule_based_fix
 
 # ── Paths ──
 RULES_DIR = Path(__file__).parent / "rules"
@@ -242,8 +242,6 @@ def validate_file(file_path, module):
         all_issues.extend(row_issues)
 
     # ── AI corrections for fixable issues ──
-    # ── AI corrections — batch all fixable issues in ONE Gemini call ──
-    from ai_engine import get_ai_corrections_batch
 
     fixable     = [i for i in all_issues if i.get("auto_fixable")]
     non_fixable = [i for i in all_issues if not i.get("auto_fixable")]
